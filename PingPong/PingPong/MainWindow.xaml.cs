@@ -20,6 +20,8 @@ namespace PingPong
     /// </summary>
     public partial class MainWindow : Window
     {
+        private int PaddleSpeed = 10;
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -32,22 +34,52 @@ namespace PingPong
             Thickness margin = paddle.Margin;
             //Point relativePoint = paddle.TransformToAncestor(grid).Transform(new Point(0, 0));
 
-
             if (Keyboard.IsKeyDown(Key.Left))
             {
-                margin.Left -= 10;
-                if (margin.Left != 0)
-                {
-                    paddle.Margin = margin;
-                }
+                MovePaddleLeft(margin);
             }
             else if (Keyboard.IsKeyDown(Key.Right))
             {
-                margin.Left += 10;
-                if (margin.Left + paddle.Width != Application.Current.MainWindow.Width - 30)
-                {
-                    paddle.Margin = margin;
-                }
+                MovePaddleRight(margin);
+            }
+            else if (Keyboard.IsKeyDown(Key.Escape)) 
+            {
+                // we also have to stop the ball while message box is active
+                ShowMessageBox();
+            }
+        }
+
+        private void MovePaddleLeft(Thickness margin)
+        {
+            margin.Left -= PaddleSpeed;
+            if (margin.Left != 0)
+            {
+                paddle.Margin = margin;
+            }
+        }
+
+        private void MovePaddleRight(Thickness margin)
+        {
+            margin.Left += PaddleSpeed;
+            if (margin.Left + paddle.Width != Application.Current.MainWindow.Width - 30)
+            {
+                paddle.Margin = margin;
+            }
+        }
+
+        private void ShowMessageBox() 
+        {
+            MessageBoxResult result = MessageBox.Show("Do you want to quit?", "Escape menu", MessageBoxButton.YesNo);
+            MessageBoxResponse(result);
+        }
+
+        private void MessageBoxResponse(MessageBoxResult result) 
+        {
+            switch (result) 
+            {
+                case MessageBoxResult.Yes:
+                    Application.Current.Shutdown();
+                    break;
             }
         }
     }
