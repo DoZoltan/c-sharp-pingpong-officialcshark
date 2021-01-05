@@ -23,25 +23,49 @@ namespace PingPong
     {
         private int Score = 0;
         private int PaddleSpeed = 10;
-        private int BallSpeed = 5;
+        private int BallSpeedVertical = 5;
+        private int BallSpeedHorizontal = 5;
+        bool MoveLeft = false;
+        bool MoveRight = false;
+        bool MoveUp = false;
+        bool MoveDown = true;
         DispatcherTimer gameTimer = new DispatcherTimer();
         public MainWindow()
         {
             InitializeComponent();
             this.KeyDown += new KeyEventHandler(KeyEvent);
             myCanvas.Focus();
-
+            RandomStart();
             gameTimer.Tick += GameTimerEvent;
             gameTimer.Interval = TimeSpan.FromMilliseconds(20);
             gameTimer.Start();
         }
 
+        private void RandomStart()
+        {
+            Random rnd = new Random();
+            int way = rnd.Next(0,2);
+            switch (way)
+            {
+                case 1:
+                    BallSpeedHorizontal = -BallSpeedHorizontal;
+                    break;
+            }
+            
+        }
+
         private void GameTimerEvent(object sender, EventArgs e)
         {
-            Canvas.SetLeft(ball, Canvas.GetLeft(ball) - BallSpeed);
+            Canvas.SetLeft(ball, Canvas.GetLeft(ball) - BallSpeedHorizontal);
+            Canvas.SetTop(ball, Canvas.GetTop(ball) + BallSpeedVertical);
             if (Canvas.GetLeft(ball) < 1 || Canvas.GetLeft(ball) + (ball.Width + 15) > Application.Current.MainWindow.Width)
             {
-                BallSpeed = -BallSpeed;
+               
+                BallSpeedHorizontal = -BallSpeedHorizontal;
+            }
+            else if (Canvas.GetTop(ball) < 1 || Canvas.GetTop(ball) + (ball.Height + 31) > Application.Current.MainWindow.Height)
+            {
+                BallSpeedVertical = -BallSpeedVertical;
             }
             if (Canvas.GetBottom(ball) <= Application.Current.MainWindow.Height)
             {
@@ -55,6 +79,10 @@ namespace PingPong
             }
         }
 
+
+
+
+
         private void KeyEvent(object sender, KeyEventArgs e)
         {
             Thickness margin = paddle.Margin;
@@ -62,6 +90,7 @@ namespace PingPong
 
             if (Keyboard.IsKeyDown(Key.Left))
             {
+           
                 MovePaddleLeft(margin);
             }
             else if (Keyboard.IsKeyDown(Key.Right))
