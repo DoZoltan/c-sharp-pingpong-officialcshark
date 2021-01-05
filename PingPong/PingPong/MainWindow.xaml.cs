@@ -43,6 +43,15 @@ namespace PingPong
             {
                 BallSpeed = -BallSpeed;
             }
+            if (Canvas.GetBottom(ball) <= Application.Current.MainWindow.Height)
+            {
+                gameTimer.Stop();
+                MessageBox.Show("Congratulations! You reached" + Score + "points.");
+                // Zoli restart?
+            }
+            if (Canvas.GetBottom(ball) >= Canvas.GetTop(paddle) && Canvas.GetBottom(ball) <= Canvas.GetBottom(paddle) && Canvas.GetLeft(ball) >= Canvas.GetLeft(paddle) && Canvas.GetRight(ball) >= Canvas.GetRight(paddle))
+            {
+            }
         }
 
         private void KeyEvent(object sender, KeyEventArgs e)
