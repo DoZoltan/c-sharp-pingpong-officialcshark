@@ -34,8 +34,8 @@ namespace PingPong
             myCanvas.Focus();
             RandomStart();
             gameTimer.Tick += GameTimerEvent;
-            gameTimer.Interval = TimeSpan.FromMilliseconds(40);
-            gameTimer.Start();
+            gameTimer.Interval = TimeSpan.FromMilliseconds(20);
+            gameTimer.Stop();
         }
 
         private void RandomStart()
@@ -165,7 +165,19 @@ namespace PingPong
             }
         }
 
+        private void str_button_Click(object sender, RoutedEventArgs e)
+        {
+            gameTimer.Start();
+        }
 
-       
+        private void rst_btn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ext_btn_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
     }
 }

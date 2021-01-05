@@ -5,9 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PingPong"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Canvas Name ="myCanvas" Background="LightBlue" Focusable="True">
-        <Rectangle x:Name="ball" Height="30" Width="30" Fill="Red" Canvas.Left="350" Canvas.Top="10" />
-        <Rectangle x:Name="paddle" HorizontalAlignment="Left" Height="20" Width="100" Fill="Black" Canvas.Left="350" Canvas.Top="350"/>
-    </Canvas>
+        Title="MainWindow" Height="500" Width="800" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Chose difficulty" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
+                <Button x:Name="ext_btn" Content="Exit Game" Grid.Column="1" Width="198" HorizontalAlignment="Left" Click="ext_btn_Click"/>
+                <Button x:Name="rst_btn" Content="Restart Game" Grid.Column="1" Width="198" HorizontalAlignment="Right" Click="rst_btn_Click"/>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="92"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <RadioButton x:Name="basic" GroupName="difficulty" Content="basic" IsChecked="True" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                <RadioButton x:Name="intermediate" GroupName="difficulty" Content="intermediate" Grid.Column="1" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                <RadioButton x:Name="expert" GroupName="difficulty" Content="expert" Grid.Column="2" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                <Button x:Name="str_button" Content="Start Game" Grid.Column="5" Click="str_button_Click"/>
+            </Grid>
+        </Grid>
+        <Canvas Name ="myCanvas" Background="LightBlue" Focusable="True" Grid.Row="1">
+            <Rectangle x:Name="ball" Height="30" Width="30" Fill="Red" Canvas.Left="350" Canvas.Top="10" />
+            <Rectangle x:Name="paddle" HorizontalAlignment="Left" Height="20" Width="100" Fill="Black" Canvas.Left="350" Canvas.Top="350"/>
+        </Canvas>
+    </Grid>
 </Window>
