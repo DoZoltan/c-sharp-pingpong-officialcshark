@@ -145,8 +145,7 @@ namespace PingPong
         }
         private bool CheckItemMeetWithPaddle(Rectangle item)
         {
-            return (Canvas.GetTop(item) + (item.Height) <= Canvas.GetTop(paddle) &&
-                Canvas.GetTop(item) + (item.Height) >= Canvas.GetTop(paddle) - item.Height &&
+            return (Canvas.GetTop(item) + (item.Height) >= Canvas.GetTop(paddle) &&         
                 Canvas.GetLeft(item) >= Canvas.GetLeft(paddle) - item.Width + 1 &&
                 Canvas.GetLeft(item) - 1 <= Canvas.GetLeft(paddle) + paddle.Width
                 );
