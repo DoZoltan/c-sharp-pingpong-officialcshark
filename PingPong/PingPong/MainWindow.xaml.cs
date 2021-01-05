@@ -22,25 +22,90 @@ namespace PingPong
     public partial class MainWindow : Window
     {
         private int Score = 0;
+        private int GemSpeed = 10;
         private int PaddleSpeed = 10;
         private int BallSpeedVertical = 5;
         private int BallSpeedHorizontal = 5;
+        private Random rnd = new Random();
 
-        DispatcherTimer gameTimer = new DispatcherTimer();
+        DispatcherTimer GameTimer = new DispatcherTimer();
+        DispatcherTimer LevelUp = new DispatcherTimer();
+        DispatcherTimer GemStarts = new DispatcherTimer();
+        DispatcherTimer FallingGem = new DispatcherTimer();
         public MainWindow()
         {
             InitializeComponent();
             this.KeyDown += new KeyEventHandler(KeyEvent);
             myCanvas.Focus();
             RandomStart();
-            gameTimer.Tick += GameTimerEvent;
-            gameTimer.Interval = TimeSpan.FromMilliseconds(20);
-            gameTimer.Stop();
+            StartTimers();
+
+        }
+
+        private void StopTimers()
+        {
+            GameTimer.Stop();
+            GemStarts.Stop();
+            FallingGem.Stop();
+            LevelUp.Stop();
+
+        }
+        private void StartTimers()
+        {
+            GemStarts.Tick += StartGemEvent;
+            GemStarts.Interval = TimeSpan.FromSeconds(40);
+            GemStarts.Start();
+
+            GameTimer.Tick += GameTimerEvent;
+            GameTimer.Interval = TimeSpan.FromMilliseconds(40);
+            GameTimer.Start();
+
+            LevelUp.Tick += LevelUpEvent;
+            LevelUp.Interval = TimeSpan.FromSeconds(10);
+            LevelUp.Start();
+
+            FallingGem.Tick += FallingGemEvent;
+            FallingGem.Interval = TimeSpan.FromMilliseconds(40);
+        }
+
+        private void LevelUpEvent(object sender, EventArgs e)
+        {
+            if(paddle.Width > 20) paddle.Width -= 10;
+        }
+
+        private void SetGemToStartPosition()
+        {
+            Canvas.SetTop(gem, -20);
+        }
+
+        private void FallingGemEvent(object sender, EventArgs e)
+        {
+            Canvas.SetTop(gem, Canvas.GetTop(gem) + GemSpeed);
+            if (CheckItemMeetWithPaddle(gem) || Canvas.GetTop(gem) + (gem.Height) > Application.Current.MainWindow.Height)
+            {
+                FallingGem.Stop();
+                SetGemToStartPosition();
+            }
+        }
+
+        private void StartGemEvent(object sender, EventArgs e)
+        {
+
+            SetGemToStartPosition();
+            RandomPosition(gem);
+            FallingGem.Start();
+
+        }
+
+        private void RandomPosition(Rectangle item)
+        {
+            int horizontalPosition = rnd.Next(10, ((int)Application.Current.MainWindow.Width - (int)item.Width * 2));
+            Canvas.SetLeft(item, horizontalPosition);
         }
 
         private void RandomStart()
         {
-            Random rnd = new Random();
+            RandomPosition(ball); 
             int way = rnd.Next(0,2);
             switch (way)
             {
@@ -66,49 +131,53 @@ namespace PingPong
             }
             if (Canvas.GetTop(ball) + (ball.Height + 31) >= Application.Current.MainWindow.Height)
             {
-                gameTimer.Stop();
+                StopTimers();
                 MessageBox.Show("Congratulations! You reached" + Score + "points.");
                 // Zoli restart?
             }
-            if (Canvas.GetTop(ball) + (ball.Height) >= Canvas.GetTop(paddle) && Canvas.GetLeft(ball) >= Canvas.GetLeft(paddle) && Canvas.GetLeft(ball) + ball.Width <= Canvas.GetLeft(paddle)+ paddle.Width)
+            //if (Canvas.GetTop(ball) + (ball.Height) >= Canvas.GetTop(paddle) && Canvas.GetLeft(ball) >= Canvas.GetLeft(paddle) && Canvas.GetLeft(ball) + ball.Width <= Canvas.GetLeft(paddle)+ paddle.Width)
+            if(CheckItemMeetWithPaddle(ball))
             {
                 Score += 1;
                 BallSpeedVertical = -BallSpeedVertical;
              
             }
         }
-
-
+        private bool CheckItemMeetWithPaddle(Rectangle item)
+        {
+            return (Canvas.GetTop(item) + (item.Height) <= Canvas.GetTop(paddle) &&
+                Canvas.GetTop(item) + (item.Height) >= Canvas.GetTop(paddle) - item.Height &&
+                Canvas.GetLeft(item) >= Canvas.GetLeft(paddle) - item.Width + 1 &&
+                Canvas.GetLeft(item) - 1 <= Canvas.GetLeft(paddle) + paddle.Width
+                );
+        }
 
 
 
         private void KeyEvent(object sender, KeyEventArgs e)
         {
-            Thickness margin = paddle.Margin;
-            //Point relativePoint = paddle.TransformToAncestor(grid).Transform(new Point(0, 0));
-
             if (Keyboard.IsKeyDown(Key.Left))
             {
-           
-                MovePaddleLeft(margin);
+                MovePaddleLeft();
             }
             else if (Keyboard.IsKeyDown(Key.Right))
             {
-                MovePaddleRight(margin);
+                MovePaddleRight();
             }
             else if (Keyboard.IsKeyDown(Key.Escape))
             {
-                gameTimer.Stop();
+                // we also have to stop the ball while message box is active
+                GameTimer.Stop();
                 ShowEscapeMessageBox();
             }
             else if (Keyboard.IsKeyDown(Key.Space)) 
             {
-                gameTimer.Stop();
+                GameTimer.Stop();
                 ShowSpaceMessageBox();
             }
         }
 
-        private void MovePaddleLeft(Thickness margin)
+        private void MovePaddleLeft()
         {   
             if(Canvas.GetLeft(paddle) > 10)
             {
@@ -116,7 +185,7 @@ namespace PingPong
             }
         }
 
-        private void MovePaddleRight(Thickness margin)
+        private void MovePaddleRight()
         {
             if (Canvas.GetLeft(paddle) + (paddle.Width + 20)  < Application.Current.MainWindow.Width)
             {
@@ -135,7 +204,7 @@ namespace PingPong
             MessageBoxResult result = MessageBox.Show("Press SPACE to continue.", "Space menu");
             if (result == MessageBoxResult.OK) 
             {
-                gameTimer.Start();
+                GameTimer.Start();
             }
         }
 
@@ -147,14 +216,14 @@ namespace PingPong
                     Application.Current.Shutdown();
                     break;
                 case MessageBoxResult.No:
-                    gameTimer.Start();
+                    GameTimer.Start();
                     break;
             }
         }
 
         private void str_button_Click(object sender, RoutedEventArgs e)
         {
-            gameTimer.Start();
+            GameTimer.Start();
         }
 
         private void rst_btn_Click(object sender, RoutedEventArgs e)
