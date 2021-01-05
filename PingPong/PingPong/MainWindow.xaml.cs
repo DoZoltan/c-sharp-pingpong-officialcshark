@@ -34,7 +34,7 @@ namespace PingPong
             myCanvas.Focus();
             RandomStart();
             gameTimer.Tick += GameTimerEvent;
-            gameTimer.Interval = TimeSpan.FromMilliseconds(20);
+            gameTimer.Interval = TimeSpan.FromMilliseconds(40);
             gameTimer.Start();
         }
 
@@ -72,6 +72,7 @@ namespace PingPong
             }
             if (Canvas.GetTop(ball) + (ball.Height) >= Canvas.GetTop(paddle) && Canvas.GetLeft(ball) >= Canvas.GetLeft(paddle) && Canvas.GetLeft(ball) + ball.Width <= Canvas.GetLeft(paddle)+ paddle.Width)
             {
+                Score += 1;
                 BallSpeedVertical = -BallSpeedVertical;
              
             }
