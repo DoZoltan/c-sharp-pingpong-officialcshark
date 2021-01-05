@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:PingPong"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid x:Name="grid">
-        <Button x:Name="paddle" Content="" Width="200" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0 0 0 30" Background="Black"/>
-        <TextBox x:Name="ball" HorizontalAlignment="Right" Height="20" TextWrapping="Wrap" VerticalAlignment="Top" Width="20" TextChanged="TextBox_TextChanged" Margin="0,0,672,0" Background="Red"/>
-    </Grid>
+    <Canvas Name ="myCanvas" Background="LightBlue" Focusable="True">
+        <Rectangle x:Name="ball" Height="30" Width="30" Fill="Red" Canvas.Left="350" Canvas.Top="10" />
+        <Rectangle x:Name="paddle" HorizontalAlignment="Left" Height="20" Width="100" Fill="Black" Canvas.Left="350" Canvas.Top="350"/>
+    </Canvas>
 </Window>

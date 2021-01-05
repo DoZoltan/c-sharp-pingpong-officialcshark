@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace PingPong
 {
@@ -20,17 +21,32 @@ namespace PingPong
     /// </summary>
     public partial class MainWindow : Window
     {
+        private int Score = 0;
         private int PaddleSpeed = 10;
-        
+        private int BallSpeed = 5;
+        DispatcherTimer gameTimer = new DispatcherTimer();
         public MainWindow()
         {
             InitializeComponent();
             this.KeyDown += new KeyEventHandler(KeyEvent);
+            myCanvas.Focus();
+
+            gameTimer.Tick += GameTimerEvent;
+            gameTimer.Interval = TimeSpan.FromMilliseconds(20);
+            gameTimer.Start();
+        }
+
+        private void GameTimerEvent(object sender, EventArgs e)
+        {
+            Canvas.SetLeft(ball, Canvas.GetLeft(ball) - BallSpeed);
+            if (Canvas.GetLeft(ball) < 1 || Canvas.GetLeft(ball) + (ball.Width + 15) > Application.Current.MainWindow.Width)
+            {
+                BallSpeed = -BallSpeed;
+            }
         }
 
         private void KeyEvent(object sender, KeyEventArgs e)
         {
-
             Thickness margin = paddle.Margin;
             //Point relativePoint = paddle.TransformToAncestor(grid).Transform(new Point(0, 0));
 
@@ -50,21 +66,31 @@ namespace PingPong
         }
 
         private void MovePaddleLeft(Thickness margin)
-        {
+        {   
+            if(Canvas.GetLeft(paddle) > 10)
+            {
+                Canvas.SetLeft(paddle, Canvas.GetLeft(paddle) - PaddleSpeed);
+            }
+            /*
             margin.Left -= PaddleSpeed;
             if (margin.Left != 0)
             {
                 paddle.Margin = margin;
-            }
+            }*/
         }
 
         private void MovePaddleRight(Thickness margin)
         {
+            if (Canvas.GetLeft(paddle) + (paddle.Width + 20)  < Application.Current.MainWindow.Width)
+            {
+                Canvas.SetLeft(paddle, Canvas.GetLeft(paddle) + PaddleSpeed);
+            }
+            /*
             margin.Left += PaddleSpeed;
             if (margin.Left + paddle.Width != Application.Current.MainWindow.Width - 30)
             {
                 paddle.Margin = margin;
-            }
+            }*/
         }
 
         private void ShowMessageBox() 
