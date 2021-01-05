@@ -51,6 +51,7 @@ namespace PingPong
             }
             if (Canvas.GetBottom(ball) >= Canvas.GetTop(paddle) && Canvas.GetBottom(ball) <= Canvas.GetBottom(paddle) && Canvas.GetLeft(ball) >= Canvas.GetLeft(paddle) && Canvas.GetRight(ball) >= Canvas.GetRight(paddle))
             {
+                // Roli
             }
         }
 
