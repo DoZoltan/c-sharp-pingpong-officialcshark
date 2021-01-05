@@ -23,10 +23,10 @@ namespace PingPong
         public MainWindow()
         {
             InitializeComponent();
-            this.KeyDown += new KeyEventHandler(key_test);
+            this.KeyDown += new KeyEventHandler(KeyEvent);
         }
 
-        private void key_test(object sender, KeyEventArgs e)
+        private void KeyEvent(object sender, KeyEventArgs e)
         {
 
             Thickness margin = paddle.Margin;
