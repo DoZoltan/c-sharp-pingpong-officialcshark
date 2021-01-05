@@ -38,8 +38,24 @@ namespace PingPong
             this.KeyDown += new KeyEventHandler(KeyEvent);
             myCanvas.Focus();
             RandomStart();
-            StartTimers();
+            //StartTimers();
+            LoadTimers();
 
+        }
+
+        private void LoadTimers() 
+        {
+            GemStarts.Tick += StartGemEvent;
+            GemStarts.Interval = TimeSpan.FromSeconds(40);
+
+            GameTimer.Tick += GameTimerEvent;
+            GameTimer.Interval = TimeSpan.FromMilliseconds(40);
+
+            LevelUp.Tick += LevelUpEvent;
+            LevelUp.Interval = TimeSpan.FromSeconds(10);
+
+            FallingGem.Tick += FallingGemEvent;
+            FallingGem.Interval = TimeSpan.FromMilliseconds(40);
         }
 
         private void StopTimers()
@@ -52,20 +68,11 @@ namespace PingPong
         }
         private void StartTimers()
         {
-            GemStarts.Tick += StartGemEvent;
-            GemStarts.Interval = TimeSpan.FromSeconds(40);
             GemStarts.Start();
 
-            GameTimer.Tick += GameTimerEvent;
-            GameTimer.Interval = TimeSpan.FromMilliseconds(40);
             GameTimer.Start();
 
-            LevelUp.Tick += LevelUpEvent;
-            LevelUp.Interval = TimeSpan.FromSeconds(10);
             LevelUp.Start();
-
-            FallingGem.Tick += FallingGemEvent;
-            FallingGem.Interval = TimeSpan.FromMilliseconds(40);
         }
 
         private void LevelUpEvent(object sender, EventArgs e)
@@ -165,13 +172,12 @@ namespace PingPong
             }
             else if (Keyboard.IsKeyDown(Key.Escape))
             {
-                // we also have to stop the ball while message box is active
-                GameTimer.Stop();
+                StopTimers();
                 ShowEscapeMessageBox();
             }
             else if (Keyboard.IsKeyDown(Key.Space)) 
             {
-                GameTimer.Stop();
+                StopTimers();
                 ShowSpaceMessageBox();
             }
         }
@@ -203,7 +209,7 @@ namespace PingPong
             MessageBoxResult result = MessageBox.Show("Press SPACE to continue.", "Space menu");
             if (result == MessageBoxResult.OK) 
             {
-                GameTimer.Start();
+                StartTimers();
             }
         }
 
@@ -222,19 +228,23 @@ namespace PingPong
 
         private void Str_button_Click(object sender, RoutedEventArgs e)
         {
-            if (intermediate.IsChecked == true)
+            if (!GameTimer.IsEnabled) 
             {
-                BallSpeedHorizontal = 7;
-                BallSpeedVertical = 7;
-                paddle.Width = 150;
-            } 
-            else if (expert.IsChecked == true) 
-            {
-                BallSpeedHorizontal = 10;
-                BallSpeedVertical = 10;
-                paddle.Width = 100;
+                if (intermediate.IsChecked == true)
+                {
+                    BallSpeedHorizontal = 7;
+                    BallSpeedVertical = 7;
+                    paddle.Width = 150;
+                }
+                else if (expert.IsChecked == true)
+                {
+                    BallSpeedHorizontal = 10;
+                    BallSpeedVertical = 10;
+                    paddle.Width = 100;
+                }
+                
+                StartTimers();
             }
-            gameTimer.Start();
         }
 
         private void Rst_btn_Click(object sender, RoutedEventArgs e)
