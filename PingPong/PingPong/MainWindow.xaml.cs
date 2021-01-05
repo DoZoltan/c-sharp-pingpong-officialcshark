@@ -98,7 +98,6 @@ namespace PingPong
             }
             else if (Keyboard.IsKeyDown(Key.Escape))
             {
-                // we also have to stop the ball while message box is active
                 gameTimer.Stop();
                 ShowEscapeMessageBox();
             }
@@ -115,12 +114,6 @@ namespace PingPong
             {
                 Canvas.SetLeft(paddle, Canvas.GetLeft(paddle) - PaddleSpeed);
             }
-            /*
-            margin.Left -= PaddleSpeed;
-            if (margin.Left != 0)
-            {
-                paddle.Margin = margin;
-            }*/
         }
 
         private void MovePaddleRight(Thickness margin)
@@ -129,12 +122,6 @@ namespace PingPong
             {
                 Canvas.SetLeft(paddle, Canvas.GetLeft(paddle) + PaddleSpeed);
             }
-            /*
-            margin.Left += PaddleSpeed;
-            if (margin.Left + paddle.Width != Application.Current.MainWindow.Width - 30)
-            {
-                paddle.Margin = margin;
-            }*/
         }
 
         private void ShowEscapeMessageBox() 
