@@ -22,8 +22,8 @@ namespace PingPong
     public partial class MainWindow : Window
     {
         private int Score = 0;
+        private int PaddleSpeed = 20;
         private int GemSpeed = 10;
-        private int PaddleSpeed = 10;
         private int BallSpeedVertical = 5;
         private int BallSpeedHorizontal = 5;
         private Random rnd = new Random();
@@ -220,17 +220,30 @@ namespace PingPong
             }
         }
 
-        private void str_button_Click(object sender, RoutedEventArgs e)
+        private void Str_button_Click(object sender, RoutedEventArgs e)
         {
-            GameTimer.Start();
+            if (intermediate.IsChecked == true)
+            {
+                BallSpeedHorizontal = 7;
+                BallSpeedVertical = 7;
+                paddle.Width = 150;
+            } 
+            else if (expert.IsChecked == true) 
+            {
+                BallSpeedHorizontal = 10;
+                BallSpeedVertical = 10;
+                paddle.Width = 100;
+            }
+            gameTimer.Start();
         }
 
-        private void rst_btn_Click(object sender, RoutedEventArgs e)
+        private void Rst_btn_Click(object sender, RoutedEventArgs e)
         {
-
+            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+            Application.Current.Shutdown();
         }
 
-        private void ext_btn_Click(object sender, RoutedEventArgs e)
+        private void Ext_btn_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
