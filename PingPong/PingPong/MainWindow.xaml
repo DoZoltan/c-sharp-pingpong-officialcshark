@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid x:Name="grid">
-        <Button x:Name="paddle" Content="The Paddle" Width="200" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0 0 0 30"/>
+        <Button x:Name="paddle" Content="" Width="200" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0 0 0 30" Background="Black"/>
+        <TextBox x:Name="ball" HorizontalAlignment="Right" Height="20" TextWrapping="Wrap" VerticalAlignment="Top" Width="20" TextChanged="TextBox_TextChanged" Margin="0,0,672,0" Background="Red"/>
     </Grid>
 </Window>
