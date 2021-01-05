@@ -46,7 +46,7 @@ namespace PingPong
                 margin.Left += 10;
                 if (margin.Left + paddle.Width != Application.Current.MainWindow.Width - 30)
                 {
-                    paddle.Margin = margin; ;
+                    paddle.Margin = margin;
                 }
             }
         }
