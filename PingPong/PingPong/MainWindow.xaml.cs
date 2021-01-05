@@ -25,10 +25,7 @@ namespace PingPong
         private int PaddleSpeed = 10;
         private int BallSpeedVertical = 5;
         private int BallSpeedHorizontal = 5;
-        bool MoveLeft = false;
-        bool MoveRight = false;
-        bool MoveUp = false;
-        bool MoveDown = true;
+
         DispatcherTimer gameTimer = new DispatcherTimer();
         public MainWindow()
         {
@@ -67,15 +64,16 @@ namespace PingPong
             {
                 BallSpeedVertical = -BallSpeedVertical;
             }
-            if (Canvas.GetBottom(ball) <= Application.Current.MainWindow.Height)
+            if (Canvas.GetTop(ball) + (ball.Height + 31) >= Application.Current.MainWindow.Height)
             {
                 gameTimer.Stop();
                 MessageBox.Show("Congratulations! You reached" + Score + "points.");
                 // Zoli restart?
             }
-            if (Canvas.GetBottom(ball) >= Canvas.GetTop(paddle) && Canvas.GetBottom(ball) <= Canvas.GetBottom(paddle) && Canvas.GetLeft(ball) >= Canvas.GetLeft(paddle) && Canvas.GetRight(ball) >= Canvas.GetRight(paddle))
+            if (Canvas.GetTop(ball) + (ball.Height) >= Canvas.GetTop(paddle) && Canvas.GetLeft(ball) >= Canvas.GetLeft(paddle) && Canvas.GetLeft(ball) + ball.Width <= Canvas.GetLeft(paddle)+ paddle.Width)
             {
-                // Roli
+                BallSpeedVertical = -BallSpeedVertical;
+             
             }
         }
 
