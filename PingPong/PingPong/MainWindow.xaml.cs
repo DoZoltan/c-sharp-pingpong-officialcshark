@@ -58,10 +58,16 @@ namespace PingPong
             {
                 MovePaddleRight(margin);
             }
-            else if (Keyboard.IsKeyDown(Key.Escape)) 
+            else if (Keyboard.IsKeyDown(Key.Escape))
             {
                 // we also have to stop the ball while message box is active
-                ShowMessageBox();
+                gameTimer.Stop();
+                ShowEscapeMessageBox();
+            }
+            else if (Keyboard.IsKeyDown(Key.Space)) 
+            {
+                gameTimer.Stop();
+                ShowSpaceMessageBox();
             }
         }
 
@@ -93,10 +99,19 @@ namespace PingPong
             }*/
         }
 
-        private void ShowMessageBox() 
+        private void ShowEscapeMessageBox() 
         {
             MessageBoxResult result = MessageBox.Show("Do you want to quit?", "Escape menu", MessageBoxButton.YesNo);
             MessageBoxResponse(result);
+        }
+
+        private void ShowSpaceMessageBox() 
+        {
+            MessageBoxResult result = MessageBox.Show("Press SPACE to continue.", "Space menu");
+            if (result == MessageBoxResult.OK) 
+            {
+                gameTimer.Start();
+            }
         }
 
         private void MessageBoxResponse(MessageBoxResult result) 
@@ -105,6 +120,9 @@ namespace PingPong
             {
                 case MessageBoxResult.Yes:
                     Application.Current.Shutdown();
+                    break;
+                case MessageBoxResult.No:
+                    gameTimer.Start();
                     break;
             }
         }
