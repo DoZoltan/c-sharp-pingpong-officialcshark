@@ -153,8 +153,8 @@ namespace PingPong
 
         private void AccelerateEvent(object sender, EventArgs e)
         {
-            BallSpeedVertical += 3;
-            BallSpeedHorizontal += 3;
+            BallSpeedVertical += 1;
+            BallSpeedHorizontal += 1;
         }
 
         private void FallingGemEvent(object sender, EventArgs e)
