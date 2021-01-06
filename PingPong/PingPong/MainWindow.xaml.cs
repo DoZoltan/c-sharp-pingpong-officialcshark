@@ -198,11 +198,11 @@ namespace PingPong
 
         private void KeyEvent(object sender, KeyEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.Left) || Keyboard.IsKeyUp(Key.Right))
+            if (Keyboard.IsKeyDown(Key.Left))
             {
                 MovePaddleLeft();
             }
-            else if (Keyboard.IsKeyDown(Key.Right) || Keyboard.IsKeyUp(Key.Left))
+            else if (Keyboard.IsKeyDown(Key.Right))
             {
                 MovePaddleRight();
             }
