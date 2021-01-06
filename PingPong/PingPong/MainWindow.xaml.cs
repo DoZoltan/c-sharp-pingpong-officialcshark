@@ -165,6 +165,7 @@ namespace PingPong
             {
                 CheckPaddleSideMeetWithBall();
                 Score += 1;
+                score.Content = Score;
                 BallSpeedVertical = -BallSpeedVertical;
              
             }
