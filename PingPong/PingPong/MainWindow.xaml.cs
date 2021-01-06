@@ -25,6 +25,7 @@ namespace PingPong
         private int Score = 0;
         private int OfficialPaddleSpeed = 0;
         private int PaddleSpeed = 20;
+        private int ActualLevel = 1;
         private int GemSpeed = 1;
         private int OfficialBallSpeedVertical = 0;
         private int BallSpeedVertical = 1;
@@ -39,6 +40,7 @@ namespace PingPong
         DispatcherTimer FallingGem = new DispatcherTimer();
         DispatcherTimer GemIsActive = new DispatcherTimer();
         DispatcherTimer AcceleratedBall = new DispatcherTimer();
+        DispatcherTimer ProgressBar = new DispatcherTimer();
 
         public MainWindow()
         {
@@ -110,7 +112,7 @@ namespace PingPong
             GameTimer.Interval = TimeSpan.FromMilliseconds(1);
 
             LevelUp.Tick += LevelUpEvent;
-            LevelUp.Interval = TimeSpan.FromSeconds(10);
+            LevelUp.Interval = TimeSpan.FromSeconds(20);
 
             FallingGem.Tick += FallingGemEvent;
             FallingGem.Interval = TimeSpan.FromMilliseconds(1);
@@ -120,6 +122,9 @@ namespace PingPong
 
             AcceleratedBall.Tick += AccelerateEvent;
             AcceleratedBall.Interval = TimeSpan.FromSeconds(15);
+
+            ProgressBar.Tick += DispatcherTimer;
+            ProgressBar.Interval = TimeSpan.FromSeconds(5);
         }
 
         private void StopTimers()
@@ -130,6 +135,7 @@ namespace PingPong
             LevelUp.Stop();
             GemIsActive.Stop();
             AcceleratedBall.Stop();
+            ProgressBar.Stop();
 
         }
         private void StartTimers()
@@ -138,11 +144,17 @@ namespace PingPong
             GameTimer.Start();
             LevelUp.Start();
             AcceleratedBall.Start();
+            ProgressBar.Start();
         }
 
         private void LevelUpEvent(object sender, EventArgs e)
         {
-            if(paddle.Width > 20) paddle.Width -= 10;
+            if (paddle.Width > 20)
+            {
+                ActualLevel += 1;
+                paddle.Width -= 10;
+                level.Content = $"Level: {ActualLevel}";
+            }
         }
 
         private void SetGemToStartPosition()
@@ -376,6 +388,15 @@ namespace PingPong
             basic.IsEnabled = false;
             intermediate.IsEnabled = false;
             expert.IsEnabled = false;
+        }
+
+        private void DispatcherTimer(object sender, EventArgs e)
+        {
+            myProgressBar.Value += 20;
+            if (myProgressBar.Value >= 100)
+            {
+                myProgressBar.Value = 0;
+            }
         }
     }
 }
