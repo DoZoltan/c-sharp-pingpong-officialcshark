@@ -213,8 +213,11 @@ namespace PingPong
             }
             else if (Keyboard.IsKeyDown(Key.Space)) 
             {
-                StopTimers();
-                ShowSpaceMessageBox();
+                if (GameTimer.IsEnabled) 
+                {
+                    StopTimers();
+                    ShowSpaceMessageBox();
+                }
             }
         }
 
@@ -242,7 +245,7 @@ namespace PingPong
 
         private void ShowSpaceMessageBox() 
         {
-            MessageBoxResult result = MessageBox.Show("Press SPACE to continue.", "Space menu");
+            MessageBoxResult result = MessageBox.Show("Press SPACE to continue.", "Pause menu");
             if (result == MessageBoxResult.OK) 
             {
                 StartTimers();
