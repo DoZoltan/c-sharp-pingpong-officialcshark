@@ -48,7 +48,6 @@ namespace PingPong
             this.KeyDown += new KeyEventHandler(KeyEvent);
             myCanvas.Focus();
             RandomStart();
-            //StartTimers();
             LoadTimers();
             str_button.IsEnabled = true;
 
@@ -60,21 +59,25 @@ namespace PingPong
             OfficialBallSpeedHorizontal = BallSpeedHorizontal;
             OfficialBallSpeedVertical = BallSpeedVertical;
             OfficialPaddleSpeed = PaddleSpeed;
-            int randomProperty = rnd.Next(0, 4);
+            int randomProperty = rnd.Next(0, 3);
             switch (randomProperty)
             {
                 case 0:
                     paddle.Width /= 2;
                     break;
                 case 1:
+                    if(Canvas.GetLeft(paddle) > 10 + paddle.Width)
+                    {
+                        Canvas.SetLeft(paddle, Canvas.GetLeft(paddle) - paddle.Width);
+                    }
+
                     paddle.Width *= 2;
                     break;
                 case 2:
                     PaddleSpeed += 5;
                     break;
                 case 3:
-                    BallSpeedHorizontal += 1;
-                    BallSpeedVertical += 1; 
+                    BallSpeedBoost(1);
                     break;
 
             }
@@ -163,25 +166,31 @@ namespace PingPong
             Canvas.SetTop(gem, 0);
         }
 
-        private void AccelerateEvent(object sender, EventArgs e)
+        private void BallSpeedBoost(int boost)
         {
             if (BallSpeedVertical > 0)
             {
-                BallSpeedVertical += 1;
-            }else
-            {
-                BallSpeedVertical -= 1;
-            }
-            if (BallSpeedHorizontal > 0)
-            {
-                BallSpeedHorizontal += 1;
+                BallSpeedVertical += boost;
             }
             else
             {
-                BallSpeedHorizontal -= 1;
+                BallSpeedVertical -= boost;
             }
-            
-            
+            if (BallSpeedHorizontal > 0)
+            {
+                BallSpeedHorizontal += boost;
+            }
+            else
+            {
+                BallSpeedHorizontal -= boost;
+            }
+        }
+
+        private void AccelerateEvent(object sender, EventArgs e)
+        {
+
+            BallSpeedBoost(1);
+
         }
 
         private void FallingGemEvent(object sender, EventArgs e)
@@ -241,7 +250,7 @@ namespace PingPong
             {
                
                 BallSpeedHorizontal = -BallSpeedHorizontal;
-                OfficialBallSpeedHorizontal = BallSpeedHorizontal;
+                OfficialBallSpeedHorizontal = -OfficialBallSpeedHorizontal;
             }
             else if (Canvas.GetTop(ball) < 8 || Canvas.GetTop(ball) + (ball.Height + 31) > Application.Current.MainWindow.Height)
             {
