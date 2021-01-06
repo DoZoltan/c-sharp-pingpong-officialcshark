@@ -278,7 +278,9 @@ namespace PingPong
                     BallSpeedVertical = 10;
                     paddle.Width = 100;
                 }
-                
+
+                DisapleRadiusButtons();
+
                 StartTimers();
             }
         }
@@ -292,6 +294,13 @@ namespace PingPong
         private void Ext_btn_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void DisapleRadiusButtons() 
+        {
+            basic.IsEnabled = false;
+            intermediate.IsEnabled = false;
+            expert.IsEnabled = false;
         }
     }
 }
