@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.IO;
+using System.Diagnostics;
 
 namespace PingPong
 {
@@ -33,6 +35,7 @@ namespace PingPong
         private int BallSpeedHorizontal = 1;
         private int RepetitionCounter = 0;
         private Random rnd = new Random();
+        private BitmapImage bimage = new BitmapImage();
 
         DispatcherTimer GameTimer = new DispatcherTimer();
         DispatcherTimer LevelUp = new DispatcherTimer();
@@ -50,6 +53,12 @@ namespace PingPong
             RandomStart();
             LoadTimers();
             str_button.IsEnabled = true;
+
+            
+            bimage.BeginInit();
+            bimage.UriSource = new Uri("shark.png", UriKind.Relative);
+            bimage.EndInit();
+            asd.ImageSource = bimage;
 
         }
 
