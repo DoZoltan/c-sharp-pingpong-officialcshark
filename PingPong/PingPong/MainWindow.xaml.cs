@@ -32,6 +32,8 @@ namespace PingPong
         DispatcherTimer LevelUp = new DispatcherTimer();
         DispatcherTimer GemStarts = new DispatcherTimer();
         DispatcherTimer FallingGem = new DispatcherTimer();
+        DispatcherTimer AcceleratedBall = new DispatcherTimer();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -57,6 +59,9 @@ namespace PingPong
 
             FallingGem.Tick += FallingGemEvent;
             FallingGem.Interval = TimeSpan.FromMilliseconds(40);
+
+            AcceleratedBall.Tick += AccelerateEvent;
+            AcceleratedBall.Interval = TimeSpan.FromSeconds(15);
         }
 
         private void StopTimers()
@@ -65,15 +70,15 @@ namespace PingPong
             GemStarts.Stop();
             FallingGem.Stop();
             LevelUp.Stop();
+            AcceleratedBall.Stop();
 
         }
         private void StartTimers()
         {
             GemStarts.Start();
-
             GameTimer.Start();
-
             LevelUp.Start();
+            AcceleratedBall.Start();
         }
 
         private void LevelUpEvent(object sender, EventArgs e)
@@ -85,6 +90,12 @@ namespace PingPong
         {
             Canvas.SetLeft(gem, -20);
             Canvas.SetTop(gem, 0);
+        }
+
+        private void AccelerateEvent(object sender, EventArgs e)
+        {
+            BallSpeedVertical += 3;
+            BallSpeedHorizontal += 3;
         }
 
         private void FallingGemEvent(object sender, EventArgs e)
@@ -122,7 +133,6 @@ namespace PingPong
                     BallSpeedHorizontal = -BallSpeedHorizontal;
                     break;
             }
-            
         }
 
         private void BallMoving()
@@ -187,11 +197,11 @@ namespace PingPong
 
         private void KeyEvent(object sender, KeyEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.Left))
+            if (Keyboard.IsKeyDown(Key.Left) || Keyboard.IsKeyUp(Key.Right))
             {
                 MovePaddleLeft();
             }
-            else if (Keyboard.IsKeyDown(Key.Right))
+            else if (Keyboard.IsKeyDown(Key.Right) || Keyboard.IsKeyUp(Key.Left))
             {
                 MovePaddleRight();
             }
