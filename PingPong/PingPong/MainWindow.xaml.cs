@@ -124,10 +124,15 @@ namespace PingPong
             
         }
 
-        private void GameTimerEvent(object sender, EventArgs e)
+        private void BallMoving()
         {
             Canvas.SetLeft(ball, Canvas.GetLeft(ball) - BallSpeedHorizontal);
             Canvas.SetTop(ball, Canvas.GetTop(ball) + BallSpeedVertical);
+        }
+
+        private void GameTimerEvent(object sender, EventArgs e)
+        {
+            BallMoving();
             if (Canvas.GetLeft(ball) < 1 || Canvas.GetLeft(ball) + (ball.Width + 15) > Application.Current.MainWindow.Width)
             {
                
@@ -146,17 +151,34 @@ namespace PingPong
             //if (Canvas.GetTop(ball) + (ball.Height) >= Canvas.GetTop(paddle) && Canvas.GetLeft(ball) >= Canvas.GetLeft(paddle) && Canvas.GetLeft(ball) + ball.Width <= Canvas.GetLeft(paddle)+ paddle.Width)
             if(CheckItemMeetWithPaddle(ball))
             {
+                CheckPaddleSideMeetWithBall();
                 Score += 1;
                 BallSpeedVertical = -BallSpeedVertical;
              
             }
         }
+
+        private void CheckPaddleSideMeetWithBall()
+        {
+            if (Canvas.GetLeft(ball) + ball.Width < Canvas.GetLeft(paddle) + 20)
+            {
+                if (BallSpeedHorizontal < 0) { BallSpeedHorizontal = -BallSpeedHorizontal; }
+            }
+            else if (Canvas.GetLeft(ball) > Canvas.GetLeft(paddle) + paddle.Width - 20)
+            {
+                if (BallSpeedHorizontal > 0) { BallSpeedHorizontal = -BallSpeedHorizontal; }              
+            }
+        }
         private bool CheckItemMeetWithPaddle(Rectangle item)
         {
-            return (Canvas.GetTop(item) + (item.Height) >= Canvas.GetTop(paddle) &&         
-                Canvas.GetLeft(item) >= Canvas.GetLeft(paddle) - item.Width + 1 &&
-                Canvas.GetLeft(item) - 1 <= Canvas.GetLeft(paddle) + paddle.Width
-                );
+            return (Canvas.GetTop(item) + (item.Height) >= Canvas.GetTop(paddle) - 1 &&
+                 Canvas.GetLeft(item) >= Canvas.GetLeft(paddle) - item.Width + 1 &&
+                 Canvas.GetLeft(item) - 1 <= Canvas.GetLeft(paddle) + paddle.Width);
+
+            //return (Canvas.GetTop(item) + (item.Height) >= Canvas.GetTop(paddle) &&         
+            //    Canvas.GetLeft(item) >= Canvas.GetLeft(paddle) - item.Width + 1 &&
+            //    Canvas.GetLeft(item) - 1 <= Canvas.GetLeft(paddle) + paddle.Width
+            //    );
         }
 
 
