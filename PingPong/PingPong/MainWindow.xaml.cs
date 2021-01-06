@@ -64,10 +64,10 @@ namespace PingPong
             switch (randomProperty)
             {
                 case 0:
-                    paddle.Width = paddle.Width / 2;
+                    paddle.Width /= 2;
                     break;
                 case 1:
-                    paddle.Width = paddle.Width * 2;
+                    paddle.Width *= 2;
                     break;
                 case 2:
                     PaddleSpeed += 5;
@@ -143,8 +143,8 @@ namespace PingPong
             GemStarts.Start();
             GameTimer.Start();
             LevelUp.Start();
-            AcceleratedBall.Start();
             ProgressBar.Start();
+
         }
 
         private void LevelUpEvent(object sender, EventArgs e)
@@ -165,8 +165,23 @@ namespace PingPong
 
         private void AccelerateEvent(object sender, EventArgs e)
         {
-            BallSpeedVertical += 1;
-            BallSpeedHorizontal += 1;
+            if (BallSpeedVertical > 0)
+            {
+                BallSpeedVertical += 1;
+            }else
+            {
+                BallSpeedVertical -= 1;
+            }
+            if (BallSpeedHorizontal > 0)
+            {
+                BallSpeedHorizontal += 1;
+            }
+            else
+            {
+                BallSpeedHorizontal -= 1;
+            }
+            
+            
         }
 
         private void FallingGemEvent(object sender, EventArgs e)
@@ -228,7 +243,7 @@ namespace PingPong
                 BallSpeedHorizontal = -BallSpeedHorizontal;
                 OfficialBallSpeedHorizontal = BallSpeedHorizontal;
             }
-            else if (Canvas.GetTop(ball) < 6 || Canvas.GetTop(ball) + (ball.Height + 31) > Application.Current.MainWindow.Height)
+            else if (Canvas.GetTop(ball) < 8 || Canvas.GetTop(ball) + (ball.Height + 31) > Application.Current.MainWindow.Height)
             {
                 BallSpeedVertical = -BallSpeedVertical;
                 OfficialBallSpeedVertical = -OfficialBallSpeedVertical;
@@ -269,11 +284,6 @@ namespace PingPong
             return (Canvas.GetTop(item) + (item.Height) >= Canvas.GetTop(paddle) - 1 &&
                  Canvas.GetLeft(item) >= Canvas.GetLeft(paddle) - item.Width + 1 &&
                  Canvas.GetLeft(item) - 1 <= Canvas.GetLeft(paddle) + paddle.Width);
-
-            //return (Canvas.GetTop(item) + (item.Height) >= Canvas.GetTop(paddle) &&         
-            //    Canvas.GetLeft(item) >= Canvas.GetLeft(paddle) - item.Width + 1 &&
-            //    Canvas.GetLeft(item) - 1 <= Canvas.GetLeft(paddle) + paddle.Width
-            //    );
         }
 
 
@@ -364,6 +374,7 @@ namespace PingPong
                     BallSpeedHorizontal = 3;
                     BallSpeedVertical = 3;
                     paddle.Width = 100;
+                    AcceleratedBall.Start();
                 }
 
                 DisapleRadiusButtons();
