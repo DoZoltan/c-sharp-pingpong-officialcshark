@@ -40,6 +40,7 @@ namespace PingPong
             RandomStart();
             //StartTimers();
             LoadTimers();
+            str_button.IsEnabled = true;
 
         }
 
@@ -145,8 +146,9 @@ namespace PingPong
             if (Canvas.GetTop(ball) + (ball.Height + 31) >= Application.Current.MainWindow.Height)
             {
                 StopTimers();
+                str_button.IsEnabled = false;
                 MessageBox.Show("Congratulations! You reached" + Score + "points.");
-                // Zoli restart?
+                
             }
             //if (Canvas.GetTop(ball) + (ball.Height) >= Canvas.GetTop(paddle) && Canvas.GetLeft(ball) >= Canvas.GetLeft(paddle) && Canvas.GetLeft(ball) + ball.Width <= Canvas.GetLeft(paddle)+ paddle.Width)
             if(CheckItemMeetWithPaddle(ball))
