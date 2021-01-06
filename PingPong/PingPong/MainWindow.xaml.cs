@@ -124,7 +124,7 @@ namespace PingPong
             AcceleratedBall.Interval = TimeSpan.FromSeconds(15);
 
             ProgressBar.Tick += DispatcherTimer;
-            ProgressBar.Interval = TimeSpan.FromSeconds(5);
+            ProgressBar.Interval = TimeSpan.FromSeconds(1);
         }
 
         private void StopTimers()
@@ -237,7 +237,7 @@ namespace PingPong
             {
                 StopTimers();
                 str_button.IsEnabled = false;
-                MessageBox.Show("Congratulations! You reached" + Score + "points.");
+                MessageBox.Show("Congratulations! You reached " + Score + " points.");
                 
             }
             //if (Canvas.GetTop(ball) + (ball.Height) >= Canvas.GetTop(paddle) && Canvas.GetLeft(ball) >= Canvas.GetLeft(paddle) && Canvas.GetLeft(ball) + ball.Width <= Canvas.GetLeft(paddle)+ paddle.Width)
@@ -392,7 +392,7 @@ namespace PingPong
 
         private void DispatcherTimer(object sender, EventArgs e)
         {
-            myProgressBar.Value += 20;
+            myProgressBar.Value += 5;
             if (myProgressBar.Value >= 100)
             {
                 myProgressBar.Value = 0;
