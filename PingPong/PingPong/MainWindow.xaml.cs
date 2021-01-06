@@ -21,17 +21,23 @@ namespace PingPong
     /// </summary>
     public partial class MainWindow : Window
     {
+        private double OfficialPaddleWidth;
         private int Score = 0;
+        private int OfficialPaddleSpeed = 0;
         private int PaddleSpeed = 20;
-        private int GemSpeed = 10;
-        private int BallSpeedVertical = 5;
-        private int BallSpeedHorizontal = 5;
+        private int GemSpeed = 1;
+        private int OfficialBallSpeedVertical = 0;
+        private int BallSpeedVertical = 1;
+        private int OfficialBallSpeedHorizontal = 0;
+        private int BallSpeedHorizontal = 1;
+        private int RepetitionCounter = 0;
         private Random rnd = new Random();
 
         DispatcherTimer GameTimer = new DispatcherTimer();
         DispatcherTimer LevelUp = new DispatcherTimer();
         DispatcherTimer GemStarts = new DispatcherTimer();
         DispatcherTimer FallingGem = new DispatcherTimer();
+        DispatcherTimer GemIsActive = new DispatcherTimer();
         DispatcherTimer AcceleratedBall = new DispatcherTimer();
 
         public MainWindow()
@@ -46,19 +52,71 @@ namespace PingPong
 
         }
 
+        private void RandomPropertyActivator()
+        {
+            OfficialPaddleWidth = paddle.Width;
+            OfficialBallSpeedHorizontal = BallSpeedHorizontal;
+            OfficialBallSpeedVertical = BallSpeedVertical;
+            OfficialPaddleSpeed = PaddleSpeed;
+            int randomProperty = rnd.Next(0, 4);
+            switch (randomProperty)
+            {
+                case 0:
+                    paddle.Width = paddle.Width / 2;
+                    break;
+                case 1:
+                    paddle.Width = paddle.Width * 2;
+                    break;
+                case 2:
+                    PaddleSpeed += 5;
+                    break;
+                case 3:
+                    BallSpeedHorizontal += 1;
+                    BallSpeedVertical += 1; 
+                    break;
+
+            }
+        }
+
+        private void OriginalValueAdjuster()
+        {
+            BallSpeedHorizontal = OfficialBallSpeedHorizontal;
+            BallSpeedVertical = OfficialBallSpeedVertical;
+            PaddleSpeed = OfficialPaddleSpeed;
+            paddle.Width = OfficialPaddleWidth;
+        }
+
+        private void GemActivatePropertyChecker(object sender, EventArgs e)
+        {
+            if (GemIsActive.IsEnabled && RepetitionCounter == 1)
+            {
+                GemIsActive.Stop();
+                OriginalValueAdjuster();
+                RepetitionCounter = 0;
+                
+            }
+            else
+            {
+                RepetitionCounter = 1;
+            }
+        }
+
         private void LoadTimers() 
         {
             GemStarts.Tick += StartGemEvent;
-            GemStarts.Interval = TimeSpan.FromSeconds(20);
+            GemStarts.Interval = TimeSpan.FromSeconds(18);
 
             GameTimer.Tick += GameTimerEvent;
-            GameTimer.Interval = TimeSpan.FromMilliseconds(40);
+            GameTimer.Interval = TimeSpan.FromMilliseconds(1);
 
             LevelUp.Tick += LevelUpEvent;
             LevelUp.Interval = TimeSpan.FromSeconds(10);
 
             FallingGem.Tick += FallingGemEvent;
-            FallingGem.Interval = TimeSpan.FromMilliseconds(40);
+            FallingGem.Interval = TimeSpan.FromMilliseconds(1);
+
+            GemIsActive.Tick += GemActivatePropertyChecker;
+            GemIsActive.Interval = TimeSpan.FromSeconds(2);
 
             AcceleratedBall.Tick += AccelerateEvent;
             AcceleratedBall.Interval = TimeSpan.FromSeconds(15);
@@ -70,6 +128,7 @@ namespace PingPong
             GemStarts.Stop();
             FallingGem.Stop();
             LevelUp.Stop();
+            GemIsActive.Stop();
             AcceleratedBall.Stop();
 
         }
@@ -103,8 +162,15 @@ namespace PingPong
             Canvas.SetTop(gem, Canvas.GetTop(gem) + GemSpeed);
             if (CheckItemMeetWithPaddle(gem) || Canvas.GetTop(gem) + (gem.Height) > Application.Current.MainWindow.Height)
             {
+                if (CheckItemMeetWithPaddle(gem))
+                {
+                    RandomPropertyActivator();
+                    GemIsActive.Start();     
+                }              
                 FallingGem.Stop();
                 SetGemToStartPosition();
+
+
             }
         }
 
@@ -144,16 +210,18 @@ namespace PingPong
         private void GameTimerEvent(object sender, EventArgs e)
         {
             BallMoving();
-            if (Canvas.GetLeft(ball) < 1 || Canvas.GetLeft(ball) + (ball.Width + 15) > Application.Current.MainWindow.Width)
+            if (Canvas.GetLeft(ball) < 8 || Canvas.GetLeft(ball) + (ball.Width + 20) > Application.Current.MainWindow.Width)
             {
                
                 BallSpeedHorizontal = -BallSpeedHorizontal;
+                OfficialBallSpeedHorizontal = BallSpeedHorizontal;
             }
-            else if (Canvas.GetTop(ball) < 1 || Canvas.GetTop(ball) + (ball.Height + 31) > Application.Current.MainWindow.Height)
+            else if (Canvas.GetTop(ball) < 6 || Canvas.GetTop(ball) + (ball.Height + 31) > Application.Current.MainWindow.Height)
             {
                 BallSpeedVertical = -BallSpeedVertical;
+                OfficialBallSpeedVertical = -OfficialBallSpeedVertical;
             }
-            if (Canvas.GetTop(ball) + (ball.Height + 31) >= Application.Current.MainWindow.Height)
+            if (Canvas.GetTop(ball) + (ball.Height * 2 + 5) >= Application.Current.MainWindow.Height - 50)
             {
                 StopTimers();
                 str_button.IsEnabled = false;
@@ -167,7 +235,8 @@ namespace PingPong
                 Score += 1;
                 score.Content = Score;
                 BallSpeedVertical = -BallSpeedVertical;
-             
+                OfficialBallSpeedVertical = -OfficialBallSpeedVertical;
+
             }
         }
 
@@ -181,6 +250,7 @@ namespace PingPong
             {
                 if (BallSpeedHorizontal > 0) { BallSpeedHorizontal = -BallSpeedHorizontal; }              
             }
+            OfficialBallSpeedHorizontal = -OfficialBallSpeedVertical;
         }
         private bool CheckItemMeetWithPaddle(Rectangle item)
         {
@@ -231,7 +301,7 @@ namespace PingPong
 
         private void MovePaddleRight()
         {
-            if (Canvas.GetLeft(paddle) + (paddle.Width + 20)  < Application.Current.MainWindow.Width)
+            if (Canvas.GetLeft(paddle) + (paddle.Width + 20)  < Application.Current.MainWindow.Width - 10)
             {
                 Canvas.SetLeft(paddle, Canvas.GetLeft(paddle) + PaddleSpeed);
             }
@@ -271,14 +341,16 @@ namespace PingPong
             {
                 if (intermediate.IsChecked == true)
                 {
-                    BallSpeedHorizontal = 7;
-                    BallSpeedVertical = 7;
+                    GemSpeed = 2;
+                    BallSpeedHorizontal = 2;
+                    BallSpeedVertical = 2;
                     paddle.Width = 150;
                 }
                 else if (expert.IsChecked == true)
                 {
-                    BallSpeedHorizontal = 10;
-                    BallSpeedVertical = 10;
+                    GemSpeed = 3;
+                    BallSpeedHorizontal = 3;
+                    BallSpeedVertical = 3;
                     paddle.Width = 100;
                 }
 
