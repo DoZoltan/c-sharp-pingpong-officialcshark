@@ -46,7 +46,7 @@ namespace PingPong
         private void LoadTimers() 
         {
             GemStarts.Tick += StartGemEvent;
-            GemStarts.Interval = TimeSpan.FromSeconds(40);
+            GemStarts.Interval = TimeSpan.FromSeconds(20);
 
             GameTimer.Tick += GameTimerEvent;
             GameTimer.Interval = TimeSpan.FromMilliseconds(40);
@@ -82,7 +82,8 @@ namespace PingPong
 
         private void SetGemToStartPosition()
         {
-            Canvas.SetTop(gem, -20);
+            Canvas.SetLeft(gem, -20);
+            Canvas.SetTop(gem, 0);
         }
 
         private void FallingGemEvent(object sender, EventArgs e)
@@ -106,7 +107,7 @@ namespace PingPong
 
         private void RandomPosition(Rectangle item)
         {
-            int horizontalPosition = rnd.Next(10, ((int)Application.Current.MainWindow.Width - (int)item.Width * 2));
+            int horizontalPosition = rnd.Next(20, ((int)Application.Current.MainWindow.Width - (int)item.Width * 2));
             Canvas.SetLeft(item, horizontalPosition);
         }
 
