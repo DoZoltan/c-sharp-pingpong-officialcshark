@@ -275,13 +275,13 @@ namespace PingPong
         {
             BallMoving();
 
-            if (Canvas.GetLeft(ball) < 8 || Canvas.GetLeft(ball) + (ball.Width + 20) > Application.Current.MainWindow.Width)
+            if (Canvas.GetLeft(ball) <= 8 || Canvas.GetLeft(ball) + (ball.Width + 20) >= Application.Current.MainWindow.Width)
             {
                 
                 BallSpeedHorizontal = -BallSpeedHorizontal;
                 OfficialBallSpeedHorizontal = -OfficialBallSpeedHorizontal;
             }
-            else if (Canvas.GetTop(ball) < 8 || Canvas.GetTop(ball) + (ball.Height + 31) > Application.Current.MainWindow.Height)
+            else if (Canvas.GetTop(ball) <= 8 || Canvas.GetTop(ball) + (ball.Height + 31) >= Application.Current.MainWindow.Height)
             {
                 
                 BallSpeedVertical = -BallSpeedVertical;
