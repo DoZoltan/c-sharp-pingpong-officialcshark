@@ -254,6 +254,16 @@ namespace PingPong
         {
             myCanvas.Background = new SolidColorBrush(Color.FromRgb((byte)rnd.Next(1, 255),
               (byte)rnd.Next(1, 255), (byte)rnd.Next(1, 233)));
+            if (myCanvas.Background.Equals("Black"))
+            {
+                paddle.Fill = new SolidColorBrush(Color.FromRgb((byte)0,
+              (byte)0, (byte)255));
+            }
+            else
+            {
+                paddle.Fill = new SolidColorBrush(Color.FromRgb((byte)0,
+              (byte)0, (byte)0));
+            }
         }
 
 
@@ -262,13 +272,13 @@ namespace PingPong
             BallMoving();
             if (Canvas.GetLeft(ball) < 8 || Canvas.GetLeft(ball) + (ball.Width + 20) > Application.Current.MainWindow.Width)
             {
-                ChangeCanvasBackgroundColor();
+                
                 BallSpeedHorizontal = -BallSpeedHorizontal;
                 OfficialBallSpeedHorizontal = -OfficialBallSpeedHorizontal;
             }
             else if (Canvas.GetTop(ball) < 8 || Canvas.GetTop(ball) + (ball.Height + 31) > Application.Current.MainWindow.Height)
             {
-                ChangeCanvasBackgroundColor();
+                
                 BallSpeedVertical = -BallSpeedVertical;
                 OfficialBallSpeedVertical = -OfficialBallSpeedVertical;
             }
