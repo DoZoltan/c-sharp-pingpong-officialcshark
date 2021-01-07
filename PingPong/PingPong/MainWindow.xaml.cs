@@ -190,13 +190,32 @@ namespace PingPong
             {
                 BallSpeedHorizontal -= boost;
             }
-            OfficialBallSpeedHorizontal = BallSpeedHorizontal;
-            OfficialBallSpeedVertical = BallSpeedVertical;
+        }
+
+        private void OfficialBallSpeedBoost(int boost)
+        {
+            if (OfficialBallSpeedVertical > 0)
+            {
+                OfficialBallSpeedVertical += boost;
+            }
+            else
+            {
+                OfficialBallSpeedVertical -= boost;
+            }
+            if (OfficialBallSpeedHorizontal > 0)
+            {
+                OfficialBallSpeedHorizontal += boost;
+            }
+            else
+            {
+                OfficialBallSpeedHorizontal -= boost;
+            }
         }
 
         private void AccelerateEvent(object sender, EventArgs e)
         {
             BallSpeedBoost(1);
+            OfficialBallSpeedBoost(1);
         }
 
         private void FallingGemEvent(object sender, EventArgs e)
