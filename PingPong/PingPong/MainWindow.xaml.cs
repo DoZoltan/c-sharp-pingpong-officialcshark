@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using System.IO;
-using System.Diagnostics;
 
 namespace PingPong
 {
@@ -86,7 +76,6 @@ namespace PingPong
                     {
                         Canvas.SetLeft(paddle, Canvas.GetLeft(paddle) - paddle.Width);
                     }
-
                     paddle.Width *= 2;
                     break;
                 case 2:
@@ -270,6 +259,7 @@ namespace PingPong
         private void GameTimerEvent(object sender, EventArgs e)
         {
             BallMoving();
+
             if (Canvas.GetLeft(ball) < 8 || Canvas.GetLeft(ball) + (ball.Width + 20) > Application.Current.MainWindow.Width)
             {
                 
@@ -282,13 +272,14 @@ namespace PingPong
                 BallSpeedVertical = -BallSpeedVertical;
                 OfficialBallSpeedVertical = -OfficialBallSpeedVertical;
             }
+
             if (Canvas.GetTop(ball) + (ball.Height * 2 + 5) >= Application.Current.MainWindow.Height - 50)
             {
                 StopTimers();
                 str_button.IsEnabled = false;
                 MessageBox.Show("Congratulations! You reached " + Score + " points.");
             }
-            //if (Canvas.GetTop(ball) + (ball.Height) >= Canvas.GetTop(paddle) && Canvas.GetLeft(ball) >= Canvas.GetLeft(paddle) && Canvas.GetLeft(ball) + ball.Width <= Canvas.GetLeft(paddle)+ paddle.Width)
+
             if(CheckItemMeetWithPaddle(ball))
             {
                 ChangeCanvasBackgroundColor();
@@ -444,6 +435,17 @@ namespace PingPong
         {
             System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
             Application.Current.Shutdown();
+        }
+
+        private void Label_MouseEnter(object sender, MouseEventArgs e)
+        {
+            game_info.IsOpen = true;
+            info_text.Text = " This is a Game\n Write here the description!";
+        }
+
+        private void Label_MouseLeave(object sender, MouseEventArgs e)
+        {
+            game_info.IsOpen = false;
         }
     }
 }

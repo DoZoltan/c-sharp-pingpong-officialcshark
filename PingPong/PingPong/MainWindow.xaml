@@ -24,6 +24,10 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                <Label Background="LightBlue" Content="?" Foreground="Red" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Width="20" FontSize="14" Margin="5 0 0 0" MouseEnter="Label_MouseEnter" MouseLeave="Label_MouseLeave"/>
+                <Popup x:Name="game_info">
+                    <TextBlock x:Name="info_text" Width="300" Height="300" Background="White" FontSize="20"/>
+                </Popup>
                 <Label Content="Chose difficulty" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
                 <Button x:Name="ext_btn" Focusable="False" Content="Exit Game" Grid.Column="3" Width="150" HorizontalAlignment="Left" Click="Ext_btn_Click"/>
                 <Button x:Name="rst_btn" Focusable="False" Content="Restart Game" Grid.Column="4" Width="150" HorizontalAlignment="Right" Click="Rst_btn_Click"/>
