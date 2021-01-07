@@ -95,7 +95,6 @@ namespace PingPong
                 case 3:
                     BallSpeedBoost(1);
                     break;
-
             }
         }
 
@@ -114,7 +113,6 @@ namespace PingPong
                 GemIsActive.Stop();
                 OriginalValueAdjuster();
                 RepetitionCounter = 0;
-                
             }
             else
             {
@@ -155,15 +153,14 @@ namespace PingPong
             GemIsActive.Stop();
             AcceleratedBall.Stop();
             ProgressBar.Stop();
-
         }
+
         private void StartTimers()
         {
             GemStarts.Start();
             GameTimer.Start();
             LevelUp.Start();
             ProgressBar.Start();
-
         }
 
         private void LevelUpEvent(object sender, EventArgs e)
@@ -204,9 +201,7 @@ namespace PingPong
 
         private void AccelerateEvent(object sender, EventArgs e)
         {
-
             BallSpeedBoost(1);
-
         }
 
         private void FallingGemEvent(object sender, EventArgs e)
@@ -221,18 +216,14 @@ namespace PingPong
                 }              
                 FallingGem.Stop();
                 SetGemToStartPosition();
-
-
             }
         }
 
         private void StartGemEvent(object sender, EventArgs e)
         {
-
             SetGemToStartPosition();
             RandomPosition(gem);
             FallingGem.Start();
-
         }
 
         private void RandomPosition(Rectangle item)
@@ -264,7 +255,6 @@ namespace PingPong
             BallMoving();
             if (Canvas.GetLeft(ball) < 8 || Canvas.GetLeft(ball) + (ball.Width + 20) > Application.Current.MainWindow.Width)
             {
-               
                 BallSpeedHorizontal = -BallSpeedHorizontal;
                 OfficialBallSpeedHorizontal = -OfficialBallSpeedHorizontal;
             }
@@ -278,7 +268,6 @@ namespace PingPong
                 StopTimers();
                 str_button.IsEnabled = false;
                 MessageBox.Show("Congratulations! You reached " + Score + " points.");
-                
             }
             //if (Canvas.GetTop(ball) + (ball.Height) >= Canvas.GetTop(paddle) && Canvas.GetLeft(ball) >= Canvas.GetLeft(paddle) && Canvas.GetLeft(ball) + ball.Width <= Canvas.GetLeft(paddle)+ paddle.Width)
             if(CheckItemMeetWithPaddle(ball))
@@ -288,7 +277,6 @@ namespace PingPong
                 score.Content = Score;
                 BallSpeedVertical = -BallSpeedVertical;
                 OfficialBallSpeedVertical = -OfficialBallSpeedVertical;
-
             }
         }
 
@@ -304,6 +292,7 @@ namespace PingPong
             }
             OfficialBallSpeedHorizontal = -OfficialBallSpeedVertical;
         }
+
         private bool CheckItemMeetWithPaddle(Rectangle item)
         {
             return (Canvas.GetTop(item) + (item.Height) >= Canvas.GetTop(paddle) - 1 &&
@@ -401,7 +390,6 @@ namespace PingPong
                 }
 
                 DisapleRadiusButtons();
-
                 StartTimers();
             }
         }
@@ -414,7 +402,6 @@ namespace PingPong
         private void Ext_btn_Click(object sender, RoutedEventArgs e)
         {
             ShowEscapeMessageBox();
-            //Application.Current.Shutdown();
         }
 
         private void DisapleRadiusButtons() 
