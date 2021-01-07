@@ -54,10 +54,17 @@ namespace PingPong
 
         private void AddSharkImage()
         {
-            bimage.BeginInit();
-            bimage.UriSource = new Uri("shark.png", UriKind.Relative);
-            bimage.EndInit();
-            shark.ImageSource = bimage;
+            try
+            {
+                bimage.BeginInit();
+                bimage.UriSource = new Uri("shark.png", UriKind.Relative);
+                bimage.EndInit();
+                shark.ImageSource = bimage;
+            }
+            catch (Exception e) 
+            {
+                MessageBox.Show("Can't find the shark image file.", "Error menu");
+            }
         }
 
         private void RandomPropertyActivator()

@@ -49,7 +49,6 @@
                 <Label x:Name="score" Content="0" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <ProgressBar x:Name="myProgressBar" Grid.Column="4" />
                 <Button x:Name="str_button" Focusable="False" Content="Start Game" Grid.Column="5" Click="Str_button_Click"/>
-                
             </Grid>
         </Grid>
         <Canvas Name ="myCanvas" Background="LightBlue" Focusable="True" Grid.Row="1">
