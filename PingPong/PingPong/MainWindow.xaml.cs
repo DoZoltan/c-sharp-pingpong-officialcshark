@@ -48,18 +48,21 @@ namespace PingPong
         public MainWindow()
         {
             InitializeComponent();
+            AddSharkImage();
             this.KeyDown += new KeyEventHandler(KeyEvent);
             myCanvas.Focus();
             RandomStart();
             LoadTimers();
             str_button.IsEnabled = true;
 
-            
+        }
+
+        private void AddSharkImage()
+        {
             bimage.BeginInit();
             bimage.UriSource = new Uri("shark.png", UriKind.Relative);
             bimage.EndInit();
-            asd.ImageSource = bimage;
-
+            shark.ImageSource = bimage;
         }
 
         private void RandomPropertyActivator()
