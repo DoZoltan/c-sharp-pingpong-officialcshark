@@ -21,13 +21,11 @@ namespace PingPong
         private int PaddleSpeed = 20;
         private int ActualLevel = 1;
         private int GemSpeed = 1;
-        private int OfficialBallSpeedVertical = 0;
         private int BallSpeedVertical = 1;
-        private int OfficialBallSpeedHorizontal = 0;
         private int BallSpeedHorizontal = 1;
         private Random rnd = new Random();
         private BitmapImage bimage = new BitmapImage();
-
+        private int BoostChecker = 1;
         DispatcherTimer GameTimer = new DispatcherTimer();
         DispatcherTimer LevelUp = new DispatcherTimer();
         DispatcherTimer GemStarts = new DispatcherTimer();
@@ -74,26 +72,28 @@ namespace PingPong
         private void RandomPropertyActivator()
         {
             OfficialPaddleWidth = paddle.Width;
-            OfficialBallSpeedHorizontal = BallSpeedHorizontal;
-            OfficialBallSpeedVertical = BallSpeedVertical;
             OfficialPaddleSpeed = PaddleSpeed;
             int randomProperty = rnd.Next(0, 3);
             switch (randomProperty)
             {
                 case 0:
+                    BoostChecker = 1;
                     paddle.Width /= 2;
                     break;
                 case 1:
-                    if(Canvas.GetLeft(paddle) > 10 + paddle.Width)
+                    BoostChecker = 1;
+                    if (Canvas.GetLeft(paddle) > 10 + paddle.Width)
                     {
                         Canvas.SetLeft(paddle, Canvas.GetLeft(paddle) - paddle.Width);
                     }
                     paddle.Width *= 2;
                     break;
                 case 2:
+                    BoostChecker = 1;
                     PaddleSpeed += 5;
                     break;
                 case 3:
+                    BoostChecker = 0;
                     BallSpeedBoost(1);
                     break;
             }
@@ -101,19 +101,21 @@ namespace PingPong
 
         private void OriginalValueAdjuster()
         {
-            BallSpeedHorizontal = OfficialBallSpeedHorizontal;
-            BallSpeedVertical = OfficialBallSpeedVertical;
+            if (BoostChecker == 0)
+            {
+                OfficialBallSpeed(1);
+            }            
             PaddleSpeed = OfficialPaddleSpeed;
             paddle.Width = OfficialPaddleWidth;
         }
 
         private void GemActivatePropertyChecker(object sender, EventArgs e)
         {
-                GemIsActive.Stop();
-                OriginalValueAdjuster();
+            GemIsActive.Stop();
+            OriginalValueAdjuster();
         }
 
-        private void LoadTimers() 
+        private void LoadTimers()
         {
             GemStarts.Tick += StartGemEvent;
             GemStarts.Interval = TimeSpan.FromSeconds(18);
@@ -192,30 +194,29 @@ namespace PingPong
             }
         }
 
-        private void OfficialBallSpeedBoost(int boost)
+        private void OfficialBallSpeed(int boost)
         {
-            if (OfficialBallSpeedVertical > 0)
+            if (BallSpeedVertical > 0)
             {
-                OfficialBallSpeedVertical += boost;
+                BallSpeedVertical -= boost;
             }
             else
             {
-                OfficialBallSpeedVertical -= boost;
+                BallSpeedVertical += boost;
             }
-            if (OfficialBallSpeedHorizontal > 0)
+            if (BallSpeedHorizontal > 0)
             {
-                OfficialBallSpeedHorizontal += boost;
+                BallSpeedHorizontal -= boost;
             }
             else
             {
-                OfficialBallSpeedHorizontal -= boost;
+                BallSpeedHorizontal += boost;
             }
         }
 
         private void AccelerateEvent(object sender, EventArgs e)
         {
             BallSpeedBoost(1);
-            OfficialBallSpeedBoost(1);
         }
 
         private void FallingGemEvent(object sender, EventArgs e)
@@ -225,10 +226,10 @@ namespace PingPong
             {
                 if (CheckItemMeetWithEachOther(gem))
                 {
-                   
+
                     RandomPropertyActivator();
-                    GemIsActive.Start();     
-                }              
+                    GemIsActive.Start();
+                }
                 FallingGem.Stop();
                 SetGemToStartPosition();
             }
@@ -249,8 +250,8 @@ namespace PingPong
 
         private void RandomStart()
         {
-            RandomPosition(ball); 
-            int way = rnd.Next(0,2);
+            RandomPosition(ball);
+            int way = rnd.Next(0, 2);
             switch (way)
             {
                 case 1:
@@ -288,15 +289,13 @@ namespace PingPong
 
             if (Canvas.GetLeft(ball) <= 8 || Canvas.GetLeft(ball) + (ball.Width + 20) >= Application.Current.MainWindow.Width)
             {
-                
+
                 BallSpeedHorizontal = -BallSpeedHorizontal;
-                OfficialBallSpeedHorizontal = -OfficialBallSpeedHorizontal;
             }
-            else if (Canvas.GetTop(ball) <= 8 || Canvas.GetTop(ball) + (ball.Height + 31) >= Application.Current.MainWindow.Height)
+            if (Canvas.GetTop(ball) <= 8 || Canvas.GetTop(ball) + (ball.Height + 31) >= Application.Current.MainWindow.Height)
             {
-                
+
                 BallSpeedVertical = -BallSpeedVertical;
-                OfficialBallSpeedVertical = -OfficialBallSpeedVertical;
             }
 
             if (Canvas.GetTop(ball) + (ball.Height * 2 + 5) >= Application.Current.MainWindow.Height - 50)
@@ -305,7 +304,7 @@ namespace PingPong
                 str_button.IsEnabled = false;
                 MessageBox.Show("Congratulations! You reached " + Score + " points.");
             }
-             if(CheckItemMeetWithEachOther(ball))
+            if (CheckItemMeetWithEachOther(ball))
 
             {
                 ChangeCanvasBackgroundColor();
@@ -314,13 +313,12 @@ namespace PingPong
 
                 Score += 1;
                 score.Content = Score;
-                if(Canvas.GetTop(ball) + (ball.Height) < Canvas.GetTop(paddle) + paddle.Height / 2)
+                if (Canvas.GetTop(ball) + (ball.Height) < Canvas.GetTop(paddle) + paddle.Height / 2)
                 {
-                    
+
                     BallSpeedVertical = -BallSpeedVertical;
-                    OfficialBallSpeedVertical = -OfficialBallSpeedVertical;
                 }
-        
+
             }
         }
 
@@ -332,14 +330,14 @@ namespace PingPong
             }
             else if (Canvas.GetLeft(ball) > Canvas.GetLeft(paddle) + paddle.Width - 20)
             {
-                if (BallSpeedHorizontal > 0) { BallSpeedHorizontal = -BallSpeedHorizontal; }              
+                if (BallSpeedHorizontal > 0) { BallSpeedHorizontal = -BallSpeedHorizontal; }
             }
-            OfficialBallSpeedHorizontal = -OfficialBallSpeedHorizontal;
         }
 
         private bool CheckItemMeetWithEachOther(Rectangle item)
         {
             return (Canvas.GetTop(item) + (item.Height) >= Canvas.GetTop(paddle) - 1 &&
+                 Canvas.GetTop(item) <= Canvas.GetTop(paddle) + paddle.Height &&
                  Canvas.GetLeft(item) >= Canvas.GetLeft(paddle) - item.Width + 1 &&
                  Canvas.GetLeft(item) - 1 <= Canvas.GetLeft(paddle) + paddle.Width);
         }
@@ -359,9 +357,9 @@ namespace PingPong
                 StopTimers();
                 ShowEscapeMessageBox();
             }
-            else if (Keyboard.IsKeyDown(Key.Space)) 
+            else if (Keyboard.IsKeyDown(Key.Space))
             {
-                if (GameTimer.IsEnabled) 
+                if (GameTimer.IsEnabled)
                 {
                     StopTimers();
                     ShowSpaceMessageBox();
@@ -371,20 +369,20 @@ namespace PingPong
 
         private bool PaddleCanMoveLeft()
         {
-            return (Canvas.GetTop(ball) + (ball.Height) >= Canvas.GetTop(paddle) &&          
+            return (Canvas.GetTop(ball) + (ball.Height) >= Canvas.GetTop(paddle) &&
                  (Canvas.GetLeft(ball) + ball.Width) > Canvas.GetLeft(paddle) - 5 &&
                  (Canvas.GetLeft(ball) + ball.Width) < Canvas.GetLeft(paddle) + 15);
         }
         private bool PaddleCanMoveRight()
         {
-            return (Canvas.GetTop(ball) + (ball.Height) >= Canvas.GetTop(paddle) &&    
+            return (Canvas.GetTop(ball) + (ball.Height) >= Canvas.GetTop(paddle) &&
                  Canvas.GetLeft(ball) < (Canvas.GetLeft(paddle) + paddle.Width) + 5 &&
                  Canvas.GetLeft(ball) > (Canvas.GetLeft(paddle) + paddle.Width - 15));
         }
 
         private void MovePaddleLeft()
-        {   
-            if(Canvas.GetLeft(paddle) > 10 && !PaddleCanMoveLeft())
+        {
+            if (Canvas.GetLeft(paddle) > 10 && !PaddleCanMoveLeft())
             {
                 Canvas.SetLeft(paddle, Canvas.GetLeft(paddle) - PaddleSpeed);
             }
@@ -392,30 +390,30 @@ namespace PingPong
 
         private void MovePaddleRight()
         {
-            if (Canvas.GetLeft(paddle) + (paddle.Width + 20)  < Application.Current.MainWindow.Width - 10 && !PaddleCanMoveRight())
+            if (Canvas.GetLeft(paddle) + (paddle.Width + 20) < Application.Current.MainWindow.Width - 10 && !PaddleCanMoveRight())
             {
                 Canvas.SetLeft(paddle, Canvas.GetLeft(paddle) + PaddleSpeed);
             }
         }
 
-        private void ShowEscapeMessageBox() 
+        private void ShowEscapeMessageBox()
         {
             MessageBoxResult result = MessageBox.Show("Do you want to quit?", "Escape menu", MessageBoxButton.YesNo);
             MessageBoxResponse(result);
         }
 
-        private void ShowSpaceMessageBox() 
+        private void ShowSpaceMessageBox()
         {
             MessageBoxResult result = MessageBox.Show("Press SPACE to continue.", "Pause menu");
-            if (result == MessageBoxResult.OK) 
+            if (result == MessageBoxResult.OK)
             {
                 StartTimers();
             }
         }
 
-        private void MessageBoxResponse(MessageBoxResult result) 
+        private void MessageBoxResponse(MessageBoxResult result)
         {
-            switch (result) 
+            switch (result)
             {
                 case MessageBoxResult.Yes:
                     Application.Current.Shutdown();
@@ -428,7 +426,7 @@ namespace PingPong
 
         private void Str_button_Click(object sender, RoutedEventArgs e)
         {
-            if (!GameTimer.IsEnabled) 
+            if (!GameTimer.IsEnabled)
             {
                 if (intermediate.IsChecked == true)
                 {
@@ -461,7 +459,7 @@ namespace PingPong
             ShowEscapeMessageBox();
         }
 
-        private void DisapleRadiusButtons() 
+        private void DisapleRadiusButtons()
         {
             basic.IsEnabled = false;
             intermediate.IsEnabled = false;
