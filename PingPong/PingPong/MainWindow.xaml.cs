@@ -413,7 +413,8 @@ namespace PingPong
 
         private void Ext_btn_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            ShowEscapeMessageBox();
+            //Application.Current.Shutdown();
         }
 
         private void DisapleRadiusButtons() 
