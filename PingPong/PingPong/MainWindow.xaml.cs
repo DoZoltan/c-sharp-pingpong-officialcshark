@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -54,16 +55,20 @@ namespace PingPong
 
         private void AddSharkImage()
         {
-            try
+            string fileName = "shark.png";
+            FileInfo f = new FileInfo(fileName);
+            string fullname = f.FullName;
+
+            if (File.Exists(fullname))
             {
                 bimage.BeginInit();
-                bimage.UriSource = new Uri("shark.png", UriKind.Relative);
+                bimage.UriSource = new Uri(fullname, UriKind.Relative);
                 bimage.EndInit();
                 shark.ImageSource = bimage;
             }
-            catch (Exception e) 
+            else
             {
-                MessageBox.Show("Can't find the shark image file.", "Error menu");
+                ball.Fill = new SolidColorBrush(Colors.Red);
             }
         }
 
