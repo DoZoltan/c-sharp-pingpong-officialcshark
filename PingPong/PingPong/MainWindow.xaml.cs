@@ -48,13 +48,17 @@ namespace PingPong
         public MainWindow()
         {
             InitializeComponent();
+            StartGame();
+        }
+
+        private void StartGame()
+        {
             AddSharkImage();
             this.KeyDown += new KeyEventHandler(KeyEvent);
             myCanvas.Focus();
             RandomStart();
             LoadTimers();
             str_button.IsEnabled = true;
-
         }
 
         private void AddSharkImage()
@@ -307,8 +311,6 @@ namespace PingPong
                  Canvas.GetLeft(item) - 1 <= Canvas.GetLeft(paddle) + paddle.Width);
         }
 
-
-
         private void KeyEvent(object sender, KeyEventArgs e)
         {
             if (Keyboard.IsKeyDown(Key.Left))
@@ -406,8 +408,7 @@ namespace PingPong
 
         private void Rst_btn_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-            Application.Current.Shutdown();
+            RestartEvent();
         }
 
         private void Ext_btn_Click(object sender, RoutedEventArgs e)
@@ -429,6 +430,12 @@ namespace PingPong
             {
                 myProgressBar.Value = 0;
             }
+        }
+
+        private void RestartEvent()
+        {
+            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+            Application.Current.Shutdown();
         }
     }
 }
