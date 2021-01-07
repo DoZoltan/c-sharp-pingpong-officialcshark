@@ -448,7 +448,7 @@ namespace PingPong
         private void Label_MouseEnter(object sender, MouseEventArgs e)
         {
             game_info.IsOpen = true;
-            info_text.Text = " This is a Game\n Write here the description!";
+            info_text.Text = "Controls:\nMove left: Left arrow\nMove Right: Right arrow\nPause: Space\nQuit: Escape";
         }
 
         private void Label_MouseLeave(object sender, MouseEventArgs e)
