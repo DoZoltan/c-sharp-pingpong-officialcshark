@@ -25,7 +25,6 @@ namespace PingPong
         private int BallSpeedVertical = 1;
         private int OfficialBallSpeedHorizontal = 0;
         private int BallSpeedHorizontal = 1;
-        private int RepetitionCounter = 0;
         private Random rnd = new Random();
         private BitmapImage bimage = new BitmapImage();
 
@@ -110,16 +109,8 @@ namespace PingPong
 
         private void GemActivatePropertyChecker(object sender, EventArgs e)
         {
-            if (GemIsActive.IsEnabled && RepetitionCounter == 1)
-            {
                 GemIsActive.Stop();
                 OriginalValueAdjuster();
-                RepetitionCounter = 0;
-            }
-            else
-            {
-                RepetitionCounter = 1;
-            }
         }
 
         private void LoadTimers() 
@@ -137,7 +128,7 @@ namespace PingPong
             FallingGem.Interval = TimeSpan.FromMilliseconds(1);
 
             GemIsActive.Tick += GemActivatePropertyChecker;
-            GemIsActive.Interval = TimeSpan.FromSeconds(2);
+            GemIsActive.Interval = TimeSpan.FromSeconds(6);
 
             AcceleratedBall.Tick += AccelerateEvent;
             AcceleratedBall.Interval = TimeSpan.FromSeconds(15);
@@ -215,6 +206,7 @@ namespace PingPong
             {
                 if (CheckItemMeetWithEachOther(gem))
                 {
+                   
                     RandomPropertyActivator();
                     GemIsActive.Start();     
                 }              
