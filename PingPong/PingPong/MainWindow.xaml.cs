@@ -199,6 +199,8 @@ namespace PingPong
             {
                 BallSpeedHorizontal -= boost;
             }
+            OfficialBallSpeedHorizontal = BallSpeedHorizontal;
+            OfficialBallSpeedVertical = BallSpeedVertical;
         }
 
         private void AccelerateEvent(object sender, EventArgs e)
@@ -209,9 +211,9 @@ namespace PingPong
         private void FallingGemEvent(object sender, EventArgs e)
         {
             Canvas.SetTop(gem, Canvas.GetTop(gem) + GemSpeed);
-            if (CheckItemMeetWithPaddle(gem) || Canvas.GetTop(gem) + (gem.Height) > Application.Current.MainWindow.Height)
+            if (CheckItemMeetWithEachOther(gem) || Canvas.GetTop(gem) + (gem.Height) > Application.Current.MainWindow.Height)
             {
-                if (CheckItemMeetWithPaddle(gem))
+                if (CheckItemMeetWithEachOther(gem))
                 {
                     RandomPropertyActivator();
                     GemIsActive.Start();     
@@ -292,15 +294,22 @@ namespace PingPong
                 str_button.IsEnabled = false;
                 MessageBox.Show("Congratulations! You reached " + Score + " points.");
             }
+             if(CheckItemMeetWithEachOther(ball))
 
-            if(CheckItemMeetWithPaddle(ball))
             {
                 ChangeCanvasBackgroundColor();
                 CheckPaddleSideMeetWithBall();
+
+
                 Score += 1;
                 score.Content = Score;
-                BallSpeedVertical = -BallSpeedVertical;
-                OfficialBallSpeedVertical = -OfficialBallSpeedVertical;
+                if(Canvas.GetTop(ball) + (ball.Height) < Canvas.GetTop(paddle) + paddle.Height / 2)
+                {
+                    
+                    BallSpeedVertical = -BallSpeedVertical;
+                    OfficialBallSpeedVertical = -OfficialBallSpeedVertical;
+                }
+        
             }
         }
 
@@ -314,10 +323,10 @@ namespace PingPong
             {
                 if (BallSpeedHorizontal > 0) { BallSpeedHorizontal = -BallSpeedHorizontal; }              
             }
-            OfficialBallSpeedHorizontal = -OfficialBallSpeedVertical;
+            OfficialBallSpeedHorizontal = -OfficialBallSpeedHorizontal;
         }
 
-        private bool CheckItemMeetWithPaddle(Rectangle item)
+        private bool CheckItemMeetWithEachOther(Rectangle item)
         {
             return (Canvas.GetTop(item) + (item.Height) >= Canvas.GetTop(paddle) - 1 &&
                  Canvas.GetLeft(item) >= Canvas.GetLeft(paddle) - item.Width + 1 &&
@@ -349,9 +358,22 @@ namespace PingPong
             }
         }
 
+        private bool PaddleCanMoveLeft()
+        {
+            return (Canvas.GetTop(ball) + (ball.Height) >= Canvas.GetTop(paddle) &&          
+                 (Canvas.GetLeft(ball) + ball.Width) > Canvas.GetLeft(paddle) - 5 &&
+                 (Canvas.GetLeft(ball) + ball.Width) < Canvas.GetLeft(paddle) + 15);
+        }
+        private bool PaddleCanMoveRight()
+        {
+            return (Canvas.GetTop(ball) + (ball.Height) >= Canvas.GetTop(paddle) &&    
+                 Canvas.GetLeft(ball) < (Canvas.GetLeft(paddle) + paddle.Width) + 5 &&
+                 Canvas.GetLeft(ball) > (Canvas.GetLeft(paddle) + paddle.Width - 15));
+        }
+
         private void MovePaddleLeft()
         {   
-            if(Canvas.GetLeft(paddle) > 10)
+            if(Canvas.GetLeft(paddle) > 10 && !PaddleCanMoveLeft())
             {
                 Canvas.SetLeft(paddle, Canvas.GetLeft(paddle) - PaddleSpeed);
             }
@@ -359,7 +381,7 @@ namespace PingPong
 
         private void MovePaddleRight()
         {
-            if (Canvas.GetLeft(paddle) + (paddle.Width + 20)  < Application.Current.MainWindow.Width - 10)
+            if (Canvas.GetLeft(paddle) + (paddle.Width + 20)  < Application.Current.MainWindow.Width - 10 && !PaddleCanMoveRight())
             {
                 Canvas.SetLeft(paddle, Canvas.GetLeft(paddle) + PaddleSpeed);
             }
