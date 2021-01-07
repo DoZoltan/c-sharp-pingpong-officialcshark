@@ -250,16 +250,25 @@ namespace PingPong
             Canvas.SetTop(ball, Canvas.GetTop(ball) + BallSpeedVertical);
         }
 
+        private void ChangeCanvasBackgroundColor()
+        {
+            myCanvas.Background = new SolidColorBrush(Color.FromRgb((byte)rnd.Next(1, 255),
+              (byte)rnd.Next(1, 255), (byte)rnd.Next(1, 233)));
+        }
+
+
         private void GameTimerEvent(object sender, EventArgs e)
         {
             BallMoving();
             if (Canvas.GetLeft(ball) < 8 || Canvas.GetLeft(ball) + (ball.Width + 20) > Application.Current.MainWindow.Width)
             {
+                ChangeCanvasBackgroundColor();
                 BallSpeedHorizontal = -BallSpeedHorizontal;
                 OfficialBallSpeedHorizontal = -OfficialBallSpeedHorizontal;
             }
             else if (Canvas.GetTop(ball) < 8 || Canvas.GetTop(ball) + (ball.Height + 31) > Application.Current.MainWindow.Height)
             {
+                ChangeCanvasBackgroundColor();
                 BallSpeedVertical = -BallSpeedVertical;
                 OfficialBallSpeedVertical = -OfficialBallSpeedVertical;
             }
@@ -272,6 +281,7 @@ namespace PingPong
             //if (Canvas.GetTop(ball) + (ball.Height) >= Canvas.GetTop(paddle) && Canvas.GetLeft(ball) >= Canvas.GetLeft(paddle) && Canvas.GetLeft(ball) + ball.Width <= Canvas.GetLeft(paddle)+ paddle.Width)
             if(CheckItemMeetWithPaddle(ball))
             {
+                ChangeCanvasBackgroundColor();
                 CheckPaddleSideMeetWithBall();
                 Score += 1;
                 score.Content = Score;
